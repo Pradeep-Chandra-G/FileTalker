@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>FileTalker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f4f9;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s ease;
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .chat-box {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 10px;
+            transition: transform 0.3s ease;
+        }
+        .message {
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: fadeIn 0.6s forwards;
+        }
+        .user-message {
+            text-align: right;
+        }
+        .bot-message {
+            text-align: left;
+        }
+        .message-text {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 20px;
+        }
+        .user-message .message-text {
+            background: #007bff;
+            color: white;
+        }
+        .bot-message .message-text {
+            background: #e9ecef;
+            color: #212529;
+        }
+        /* Loading spinner */
+        .loading-spinner {
+            display: none;
+            margin: 10px auto;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #007bff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        /* Fade-in animation for messages */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        /* Spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <h4 class="text-center">AI Chat</h4>
+    <div class="chat-box">
+        <!-- User Message -->
+        <div class="message user-message" th:if="${message}">
+            <div class="message-text" th:text="${message}"></div>
+        </div>
+        <!-- Bot Response -->
+        <div class="message bot-message" th:if="${response}">
+            <div class="message-text" th:text="${response}"></div>
+        </div>
+        <!-- Loading Spinner (for waiting response) -->
+        <div class="loading-spinner" id="loadingSpinner"></div>
+    </div>
+    <form action="/response" method="post" class="mt-4" id="chatForm">
+        <div class="input-group">
+            <input type="text" name="message" class="form-control" placeholder="Ask a question..." required>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Show the loading spinner when the form is being submitted
+    document.getElementById("chatForm").addEventListener("submit", function () {
+        document.getElementById("loadingSpinner").style.display = "block";
+    });
+
+    // Hide the loading spinner once the response is received
+    document.addEventListener("DOMContentLoaded", function () {
+        // Make sure the loading spinner is hidden when the page loads
+        document.getElementById("loadingSpinner").style.display = "none";
+    });
+</script>
+</body>
+</html>
